@@ -11,7 +11,7 @@ This repository contains the implementation of the **Multi-level PEnet** (MLPEne
 ## Architecture Overview
 
 1. **Multi-Level Condensation Phase**:
-   - **1D Convolutional Neural Networks (CNNs)** and **split-concatenation operations** are used to handle heterogeneous parameters, significantly improving the processing of long sequences.
+   - **1D Convolutional Neural Networks (CNNs)** and **split-concatenation operations** are used to handle heterogeneous parameters.
    
 2. **Information Extraction Phase**:
    - The condensed information is processed using **LSTM** layers, capturing deep features from variable-length input sequences.
