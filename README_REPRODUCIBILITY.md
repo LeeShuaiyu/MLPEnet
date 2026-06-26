@@ -103,7 +103,7 @@ For a PENN-style quick reproduction from a released checkpoint, run:
 python scripts/reproduce.py \
   --checkpoint checkpoints/alpha_ou.pt \
   --output-dir outputs/repro \
-  --force-data
+  --fixed-grid
 ```
 
 The script regenerates 5,000 random alpha-stable OU evaluation paths, loads the
@@ -113,11 +113,10 @@ provided checkpoint, writes `eval_metrics.csv`, stores predictions, and generate
 - `figures/residuals.png`
 - `summary.md`
 
-To additionally regenerate the manuscript fixed test grid and compare with the
-reported alpha-stable OU values, add:
+To regenerate an existing output dataset, add:
 
 ```bash
---fixed-grid
+--force-data
 ```
 
 Supporting/sanity configs:

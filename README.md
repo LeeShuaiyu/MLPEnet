@@ -46,8 +46,9 @@ Gaussian OU is retained as a sanity check. Student-Levy is not part of the curre
 public reproduction target because the original CF-RS increment generator was not
 archived in the old repository snapshot.
 
-Each run saves generated data, config, environment metadata, training history,
-checkpoints, predictions, and table-style metrics under the selected `--work-dir`.
+Checkpoint-only runs write generated data, predictions, figures, and metrics under
+the selected `--output-dir`. Training runs write data, logs, checkpoints, and
+metrics under the selected `--work-dir`.
 
 ## Repository Structure
 
