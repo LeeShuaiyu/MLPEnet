@@ -6,8 +6,10 @@ Place the released alpha-stable OU checkpoint here:
 checkpoints/alpha_ou.pt
 ```
 
-The checkpoint is distributed separately from the Git repository, for example as
-a GitHub Release asset named `alpha_ou.pt`.
+The checkpoint is distributed separately from the Git repository as a GitHub
+Release asset:
+
+<https://github.com/LeeShuaiyu/MLPEnet/releases/download/alpha-ou-v1/alpha_ou.pt>
 
 Expected file:
 
