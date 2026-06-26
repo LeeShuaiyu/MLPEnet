@@ -4,7 +4,7 @@ This repository was originally derived from the public PENN implementation:
 
 <https://github.com/xiaolong-snnu/PENN>
 
-Relevant conventions preserved or made explicit in this repaired branch:
+Relevant conventions preserved or made explicit in this release:
 
 - The legacy data format stored `X`, `Y`, and `H`, where `H` is the time span `T`.
 - The model concatenated this scalar to the pooled LSTM feature and called it `h` in code.
@@ -14,7 +14,7 @@ Relevant conventions preserved or made explicit in this repaired branch:
 - The legacy split operation split long contiguous trajectory segments and concatenated
   corresponding positions along the feature axis. It was not adjacent-point grouping.
 
-This branch uses memory-mapped `.npy` datasets instead of large pickle files, but keeps
+This release uses memory-mapped `.npy` datasets instead of large pickle files, but keeps
 the same modeling idea. The YAML field `data.auxiliary_input` controls whether the
 scalar appended to the network is `span_t` (legacy PENN-compatible) or `dt`.
 

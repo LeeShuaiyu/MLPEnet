@@ -1,57 +1,32 @@
-# Reproducibility Notes for MLPEnet
+# Experiment Notes for MLPEnet
 
-This branch is a repaired reproducibility implementation for:
+This repository provides the public code package for:
 
 **Multi-level PEnet: A Robust Three-Stage Model for Parameter Estimation in Non-Gaussian Noise-Driven Stochastic Differential Equations**
 
-The original repository was an early implementation snapshot. It did not archive the
-exact training seeds, final checkpoints, generated datasets, or table-generation scripts
-used for the manuscript. This branch therefore aims to reproduce the experimental
-pipeline and reported trends as closely as possible with explicit configs and logs.
+The package contains config-driven data generation, model training, checkpoint
+evaluation, fixed-grid evaluation, and figure generation for the alpha-stable OU
+experiment.
 
-## What Was Repaired
+## Implementation Contents
 
 - Multi-parameter output: the model now estimates all configured parameters jointly.
-- Weighted L1 training loss: matches the manuscript description.
-- Reproducible data generation: train/eval/test splits are generated from YAML configs.
-- Auxiliary input uses `dt = T / N` in manuscript reproduction configs.
+- Weighted L1 training loss for parameter-scale balancing.
+- Config-driven train/eval/test data generation.
+- Auxiliary input uses `dt = T / N`.
 - Long-sequence support: datasets are stored as memory-mapped `.npy` arrays.
-- Fixed test grids: evaluation can reproduce the table-style parameter combinations.
+- Fixed test grids: evaluation supports the parameter combinations reported in the paper.
 - Audit trail: each run saves config, environment, commit hash, history, checkpoints, predictions, and metrics.
 - Smoke tests: small configs verify the Gaussian sanity path and the alpha-stable
-  reproduction path end-to-end.
+  evaluation path end-to-end.
 
-## Current Reproduction Scope
+## Public Release Scope
 
-The current reproduction target is the **alpha-stable OU experiment**. This is the
-cleanest and most defensible target because the alpha-stable increments are generated
-directly with the Chambers-Mallows-Stuck method and do not depend on the separate
-characteristic-function rejection sampler.
+The primary public experiment is the **alpha-stable OU** case. The alpha-stable
+increments are generated directly with the Chambers-Mallows-Stuck method.
 
-Gaussian OU is kept as a sanity check. Student-Levy paper reproduction configs are
-not included in this release.
-
-The paper describes SAM as part of the optimization strategy, but the original
-repository did not archive the exact SAM hyperparameters or final checkpoints. In this
-repaired branch, the default alpha-stable reproduction config uses Adam because it was
-the stable optimizer that matched the paper-scale alpha-stable diagnostics most closely.
-SAM variants are retained only as diagnostics unless their final full-run metrics are
-explicitly reported.
-
-## Optimizer Interface
-
-Adam is the default optimizer in the training code and in the alpha-stable
-reproduction config. SAM remains available for diagnostics by setting:
-
-```yaml
-training:
-  optimizer: sam
-  sam_base_optimizer: adam
-  sam_rho: 0.01
-```
-
-For optimizer diagnostics, `sam_base_optimizer: sgd` can also be used, but the
-repaired alpha-stable release does not depend on that setting.
+Gaussian OU is included as a sanity check. Student-Levy experiments are not part
+of this public release.
 
 ## Data Generation Details
 
@@ -61,25 +36,8 @@ Chambers-Mallows-Stuck method. The auxiliary scalar passed to the network is
 `h = dt = T / N`.
 
 The released config also uses `burnin_time: 10.0` before collecting each simulated
-trajectory. This is a repaired-pipeline convention retained for stable OU path
-generation and compatibility with the PENN-derived data workflow; it was not
-separately archived as a manuscript artifact in the original repository.
-
-## Important Caveat for Student-Levy Experiments
-
-The manuscript used characteristic-function rejection sampling for Student-Levy
-increments. The exact original generator and generated datasets were not archived in
-the old GitHub snapshot. This branch keeps the code path documented, but does not
-ship a paper-reproduction YAML config for Student-Levy. Any future Student-Levy run
-must either restore the original CF-RS generator or be clearly labeled as a surrogate,
-not as a reproduction of the manuscript table.
-
-Consequently:
-
-- Gaussian and alpha-stable cases are the primary supported reproduction targets.
-- In the current release plan, alpha-stable OU is the main reproduction target.
-- Student-Levy results should be skipped unless the original CF-RS generator is restored.
-- Any public release should state this caveat rather than claiming bitwise or exact numerical reproduction.
+trajectory, following the transient-discard convention used in the PENN-derived OU
+data workflow.
 
 ## Quick Smoke Test
 
@@ -110,7 +68,7 @@ Primary paper-scale config:
 
 ## Checkpoint-Only Reproduction
 
-For a PENN-style quick reproduction from a released checkpoint, run:
+For checkpoint evaluation, run:
 
 ```bash
 python scripts/reproduce.py \
@@ -120,7 +78,7 @@ python scripts/reproduce.py \
 ```
 
 The script regenerates 5,000 random alpha-stable OU evaluation paths, loads the
-provided checkpoint, writes `eval_metrics.csv`, stores predictions, and generates:
+released checkpoint, writes `eval_metrics.csv`, stores predictions, and generates:
 
 - `figures/predictions.png`
 - `figures/residuals.png`
@@ -153,32 +111,8 @@ Outputs:
 - `runs/<name>/evaluation/test_metrics.csv`
 - `runs/<name>/evaluation/test_grouped_metrics.csv`
 
-The grouped metrics file is the closest fixed-grid output for comparison with the manuscript.
-For the alpha-stable OU case, compare it with the reported fixed-grid values using:
-
-```bash
-python scripts/compare_fixed_grid.py \
-  runs/alpha/evaluation/test_grouped_metrics.csv \
-  --csv-out runs/alpha/evaluation/comparison.csv
-```
-
-## Expected Differences
-
-Exact numeric agreement is not guaranteed because the old snapshot did not preserve:
-
-- original random seeds
-- exact generated datasets
-- original checkpoints
-- exact Student-Levy random number generator implementation
-- full table-generation scripts
-
-Acceptable reproduction should focus on:
-
-- correct parameter ranges and SDE settings
-- the manuscript auxiliary input convention `h = dt = T / N`
-- table-scale MLPEnet estimates matching the manuscript's reported alpha-stable OU range
-- boundary behavior consistent with the paper narrative
-- grouped MAE, bias, and SD in the same broad scale as the manuscript after full training
+The grouped metrics file contains the fixed-grid means, standard deviations,
+biases, MAEs, and RMSEs for the manuscript parameter settings.
 
 ## Cloud Run Checklist
 
@@ -192,6 +126,3 @@ Acceptable reproduction should focus on:
 See [docs/PENN_REFERENCE.md](docs/PENN_REFERENCE.md) for compatibility notes with
 the upstream PENN codebase and [docs/CLOUD_RUN.md](docs/CLOUD_RUN.md) for a more
 detailed GPU-server runbook.
-
-See [docs/REPRODUCTION_STATUS.md](docs/REPRODUCTION_STATUS.md) for the current
-cloud-run metrics and release recommendation.

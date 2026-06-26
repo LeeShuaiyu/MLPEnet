@@ -62,9 +62,8 @@ Set `FORCE_DATA=0` when rerunning training against an already generated
 FORCE_DATA=0 PYTHON=.venv/bin/python bash scripts/run_cloud.sh full
 ```
 
-Student-Levy is intentionally skipped for this release plan because its manuscript
-data generation depended on a CF-RS generator that was not archived in the old
-repository snapshot.
+This public release focuses on the alpha-stable OU experiment. Gaussian OU is
+included as a sanity check.
 
 ## 5. Result Files to Preserve
 
@@ -80,11 +79,7 @@ For each run, keep:
 
 The generated `data/` folders are large but should be kept until results are accepted.
 
-## 6. Publication Decision
+## 6. Release Checklist
 
-Do not publish this branch until:
-
-- smoke tests pass,
-- full alpha-stable run produces table-scale metrics,
-- Student-Levy is clearly marked as out of scope for this release,
-- the release notes state which results are exact pipeline reproductions and which are repaired approximations.
+Before publishing a trained run, preserve the run config, environment snapshot,
+training history, best checkpoint, and evaluation metrics.

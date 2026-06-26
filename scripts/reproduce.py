@@ -17,7 +17,6 @@ import numpy as np
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from compare_fixed_grid import compare_fixed_grid
 from mlpenet.data import generate_dataset
 from mlpenet.evaluate import evaluate
 from mlpenet.utils import ensure_dir, load_config, save_json
@@ -211,11 +210,11 @@ def write_summary(
     metrics_path: Path,
     prediction_figure_path: Path,
     residual_figure_path: Path,
-    fixed_grid_comparison_path: Path | None,
+    fixed_grid_metrics_path: Path | None,
 ) -> None:
     rows = _read_metrics(metrics_path)
     lines = [
-        "# Alpha-Stable OU Checkpoint Reproduction",
+        "# Alpha-Stable OU Evaluation",
         "",
         "This run regenerates evaluation data, loads the provided checkpoint, runs inference, and writes diagnostic figures.",
         "",
@@ -226,8 +225,8 @@ def write_summary(
         f"- Prediction scatter: `{prediction_figure_path}`",
         f"- Standardized residuals: `{residual_figure_path}`",
     ]
-    if fixed_grid_comparison_path is not None:
-        lines.append(f"- Fixed-grid comparison CSV: `{fixed_grid_comparison_path}`")
+    if fixed_grid_metrics_path is not None:
+        lines.append(f"- Fixed-grid metrics CSV: `{fixed_grid_metrics_path}`")
     lines.extend(
         [
             "",
@@ -294,7 +293,7 @@ def main() -> None:
     figure_dir = ensure_dir(output_dir / "figures")
 
     save_json(
-        output_dir / "reproduction_manifest.json",
+        output_dir / "manifest.json",
         {
             "config": str(config_path),
             "checkpoint": str(checkpoint_path),
@@ -317,17 +316,13 @@ def main() -> None:
     make_prediction_figure(predictions_path, parameter_names, prediction_figure_path)
     make_residual_figure(predictions_path, parameter_names, residual_figure_path)
 
-    fixed_grid_comparison_path = None
+    fixed_grid_metrics_path = None
     if args.fixed_grid:
-        print("[fixed-grid] generating manuscript fixed test grid and comparing with reported values")
+        print("[fixed-grid] generating manuscript fixed test grid")
         generate_dataset(config, split="test", output_dir=data_dir, force=args.force_data)
         fixed_grid_dir = ensure_dir(output_dir / "fixed_grid")
         evaluate(config, data_dir=data_dir, checkpoint=checkpoint_path, output_dir=fixed_grid_dir, split="test")
-        fixed_grid_comparison_path = fixed_grid_dir / "comparison.csv"
-        compare_fixed_grid(
-            fixed_grid_dir / "test_grouped_metrics.csv",
-            csv_out=fixed_grid_comparison_path,
-        )
+        fixed_grid_metrics_path = fixed_grid_dir / "test_grouped_metrics.csv"
 
     print("[4/4] writing summary")
     write_summary(
@@ -338,7 +333,7 @@ def main() -> None:
         metrics_path=metrics_path,
         prediction_figure_path=prediction_figure_path,
         residual_figure_path=residual_figure_path,
-        fixed_grid_comparison_path=fixed_grid_comparison_path,
+        fixed_grid_metrics_path=fixed_grid_metrics_path,
     )
     print(f"done: {output_dir}")
 

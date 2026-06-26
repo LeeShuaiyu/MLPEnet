@@ -13,8 +13,8 @@ Expected file:
 
 ```text
 name: alpha_ou.pt
-size: 351K
-sha256: 4e9ada33f8611f31b28940dce5320acd0b02a163412bfc3ba4dcdba0b6634ba7
+size: 113K
+sha256: 94ccc35644f94fb985415b0af6dcb874f60081e723567aedff418810878b98bf
 ```
 
 The checkpoint-only reproduction entry point is:
