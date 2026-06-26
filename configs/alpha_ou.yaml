@@ -1,0 +1,56 @@
+seed: 20260625
+deterministic: true
+experiment:
+  name: alpha_ou
+  sde: ou
+  noise: alpha_stable
+  parameters:
+    eta: [0.0, 5.0]
+    epsilon: [0.0, 0.05]
+    alpha: [1.01, 2.0]
+data:
+  N: [3000, 4000]
+  T: [5.0, 15.0]
+  auxiliary_input: dt
+  burnin_time: 10.0
+  samples:
+    train: 200000
+    eval: 5000
+    test: 6000
+  chunk_size: 512
+  test_samples_per_point: 1000
+  test_grid:
+    - {eta: 1.5, epsilon: 0.03, alpha: 1.7}
+    - {eta: 3.5, epsilon: 0.03, alpha: 1.7}
+    - {eta: 2.5, epsilon: 0.02, alpha: 1.1}
+    - {eta: 2.0, epsilon: 0.04, alpha: 1.7}
+    - {eta: 2.5, epsilon: 0.03, alpha: 1.5}
+    - {eta: 2.5, epsilon: 0.01, alpha: 1.8}
+model:
+  architecture: mlpenet
+  input_dim: 1
+  hidden_dim: 25
+  lstm_layers: 4
+  conv_layers: 2
+  conv_channels: 25
+  conv_kernel_size: 3
+  split_parts: 8
+  fc_layers: 3
+  fc_hidden: 20
+  activation: elu
+training:
+  optimizer: adam
+  loss_weights:
+    eta: 3.0
+    epsilon: 20.0
+    alpha: 1.0
+  learning_rate: 0.001
+  epochs: 800
+  batch_size: 800
+  eval_batch_size: 1000
+  num_workers: 2
+  drop_last: true
+  device: auto
+evaluation:
+  batch_size: 2000
+  device: auto

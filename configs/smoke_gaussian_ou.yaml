@@ -1,0 +1,50 @@
+seed: 20260625
+deterministic: true
+experiment:
+  name: smoke_gaussian_ou
+  sde: ou
+  noise: gaussian
+  parameters:
+    eta: [0.0, 5.0]
+    epsilon: [0.0, 0.05]
+data:
+  N: [60, 80]
+  T: [1.0, 2.0]
+  auxiliary_input: dt
+  burnin_time: 0.0
+  samples:
+    train: 128
+    eval: 32
+    test: 64
+  chunk_size: 64
+  test_samples_per_point: 16
+  test_grid:
+    - {eta: 1.5, epsilon: 0.03}
+    - {eta: 2.5, epsilon: 0.01}
+model:
+  architecture: mlpenet
+  input_dim: 1
+  hidden_dim: 8
+  lstm_layers: 1
+  conv_layers: 1
+  conv_channels: 8
+  conv_kernel_size: 3
+  split_parts: 4
+  fc_layers: 2
+  fc_hidden: 12
+  activation: elu
+training:
+  optimizer: adam
+  loss_weights:
+    eta: 3.0
+    epsilon: 20.0
+  learning_rate: 0.001
+  epochs: 2
+  batch_size: 32
+  eval_batch_size: 32
+  num_workers: 0
+  drop_last: false
+  device: auto
+evaluation:
+  batch_size: 64
+  device: auto
