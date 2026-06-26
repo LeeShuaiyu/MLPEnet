@@ -16,17 +16,17 @@ experiment.
 - Auxiliary input uses `dt = T / N`.
 - Long-sequence support: datasets are stored as memory-mapped `.npy` arrays.
 - Fixed test grids: evaluation supports the parameter combinations reported in the paper.
-- Audit trail: each run saves config, environment, commit hash, history, checkpoints, predictions, and metrics.
+- Run records: each run saves config, environment, commit hash, history, checkpoints, predictions, and metrics.
 - Smoke tests: small configs verify the Gaussian sanity path and the alpha-stable
   evaluation path end-to-end.
 
-## Public Release Scope
+## Experiment Scope
 
-The primary public experiment is the **alpha-stable OU** case. The alpha-stable
+The primary experiment is the **alpha-stable OU** case. The alpha-stable
 increments are generated directly with the Chambers-Mallows-Stuck method.
 
-Gaussian OU is included as a sanity check. Student-Levy experiments are not part
-of this public release.
+Gaussian OU is included as a sanity check. Student-Levy experiments are not
+included in this package.
 
 ## Data Generation Details
 
@@ -36,8 +36,8 @@ Chambers-Mallows-Stuck method. The auxiliary scalar passed to the network is
 `h = dt = T / N`.
 
 The released config also uses `burnin_time: 10.0` before collecting each simulated
-trajectory, following the transient-discard convention used in the PENN-derived OU
-data workflow.
+trajectory, following the transient-discard convention used in the OU data
+workflow.
 
 ## Quick Smoke Test
 
@@ -123,6 +123,6 @@ biases, MAEs, and RMSEs for the manuscript parameter settings.
 5. Start paper-scale runs inside `tmux`.
 6. Save run directories before publishing or pruning checkpoints.
 
-See [docs/PENN_REFERENCE.md](docs/PENN_REFERENCE.md) for compatibility notes with
-the upstream PENN codebase and [docs/CLOUD_RUN.md](docs/CLOUD_RUN.md) for a more
-detailed GPU-server runbook.
+See [docs/IMPLEMENTATION_NOTES.md](docs/IMPLEMENTATION_NOTES.md) for data and
+model conventions and [docs/CLOUD_RUN.md](docs/CLOUD_RUN.md) for a more detailed
+GPU-server runbook.

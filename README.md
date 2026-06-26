@@ -4,7 +4,7 @@ Official implementation of **Multi-level PEnet (MLPEnet)** for parameter
 estimation in stochastic differential equations driven by Gaussian and
 non-Gaussian Levy noise.
 
-This release focuses on the alpha-stable OU experiment from the paper and
+This repository focuses on the alpha-stable OU experiment from the paper and
 provides the model code, experiment configs, checkpoint-based evaluation, and
 training/evaluation entry points.
 
@@ -54,7 +54,7 @@ metrics under the selected `--work-dir`.
 - `configs/`: smoke and paper-scale YAML configs.
 - `scripts/`: CLI entry points for data generation, training, evaluation, and figure generation.
 - `README_REPRODUCIBILITY.md`: experiment and evaluation notes.
-- `docs/PENN_REFERENCE.md`: compatibility notes for the PENN-derived conventions.
+- `docs/IMPLEMENTATION_NOTES.md`: implementation notes for data and model conventions.
 - `docs/CLOUD_RUN.md`: GPU-server runbook for pilot and full reproduction jobs.
 
 ## Citation

@@ -1,11 +1,11 @@
-# Cloud Reproduction Runbook
+# Cloud Runbook
 
 Use this runbook after the smoke tests pass locally.
 
 ## 1. Server Setup
 
 ```bash
-git clone -b reproducibility-2026 https://github.com/LeeShuaiyu/MLPEnet.git
+git clone https://github.com/LeeShuaiyu/MLPEnet.git
 cd MLPEnet
 
 python3 -m venv .venv
@@ -62,7 +62,7 @@ Set `FORCE_DATA=0` when rerunning training against an already generated
 FORCE_DATA=0 PYTHON=.venv/bin/python bash scripts/run_cloud.sh full
 ```
 
-This public release focuses on the alpha-stable OU experiment. Gaussian OU is
+This repository focuses on the alpha-stable OU experiment. Gaussian OU is
 included as a sanity check.
 
 ## 5. Result Files to Preserve
@@ -79,7 +79,7 @@ For each run, keep:
 
 The generated `data/` folders are large but should be kept until results are accepted.
 
-## 6. Release Checklist
+## 6. Run Preservation Checklist
 
 Before publishing a trained run, preserve the run config, environment snapshot,
 training history, best checkpoint, and evaluation metrics.
