@@ -10,6 +10,8 @@ release of this branch.
 - Data: regenerated from the repaired YAML pipeline with `Ktrain=200000`,
   `Keval=5000`, and six fixed test parameter combinations with 1000 paths each.
 - Auxiliary scalar: `h = dt = T / N`.
+- Simulation uses `burnin_time=10.0` before collecting each trajectory; this is a
+  repaired-pipeline convention rather than a separately archived manuscript artifact.
 - Student-Levy: out of scope because the manuscript CF-RS generator and generated
   datasets were not archived.
 
@@ -35,7 +37,7 @@ no worse than the manuscript table. The remaining four are within the same scale
 
 ## Diagnostics
 
-- Original-style `SAM + SGD` was unstable and produced exploding losses.
+- Diagnostic `SAM + SGD` was unstable and produced exploding losses.
 - `SAM + Adam` with `rho=0.01` and gradient clipping was numerically stable but
   underperformed Adam on the alpha-stable diagnostic run.
 - `split_parts=2` and `split_parts=4` diagnostics were slower or comparable in speed

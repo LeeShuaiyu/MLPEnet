@@ -18,7 +18,8 @@ pipeline and reported trends as closely as possible with explicit configs and lo
 - Long-sequence support: datasets are stored as memory-mapped `.npy` arrays.
 - Fixed test grids: evaluation can reproduce the table-style parameter combinations.
 - Audit trail: each run saves config, environment, commit hash, history, checkpoints, predictions, and metrics.
-- Smoke tests: small configs verify that all three cases run end-to-end.
+- Smoke tests: small configs verify the Gaussian sanity path and the alpha-stable
+  reproduction path end-to-end.
 
 ## Current Reproduction Scope
 
@@ -52,6 +53,18 @@ training:
 For optimizer diagnostics, `sam_base_optimizer: sgd` can also be used, but the
 repaired alpha-stable release does not depend on that setting.
 
+## Data Generation Details
+
+The alpha-stable OU reproduction config uses the manuscript ranges for `N`, `T`,
+`eta`, `epsilon`, and `alpha`, and simulates alpha-stable increments with the
+Chambers-Mallows-Stuck method. The auxiliary scalar passed to the network is
+`h = dt = T / N`.
+
+The released config also uses `burnin_time: 10.0` before collecting each simulated
+trajectory. This is a repaired-pipeline convention retained for stable OU path
+generation and compatibility with the PENN-derived data workflow; it was not
+separately archived as a manuscript artifact in the original repository.
+
 ## Important Caveat for Student-Levy Experiments
 
 The manuscript used characteristic-function rejection sampling for Student-Levy
@@ -63,7 +76,7 @@ not as a reproduction of the manuscript table.
 
 Consequently:
 
-- Gaussian and alpha-stable cases are the primary exact reproduction targets.
+- Gaussian and alpha-stable cases are the primary supported reproduction targets.
 - In the current release plan, alpha-stable OU is the main reproduction target.
 - Student-Levy results should be skipped unless the original CF-RS generator is restored.
 - Any public release should state this caveat rather than claiming bitwise or exact numerical reproduction.
